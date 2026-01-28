@@ -40,5 +40,44 @@ fasttext_model=FastText(sentences=tokenized_sentences,vector_size=50,window=5,mi
 
 
 #görselleştirme -> PCA
+def plot_word_embedding(model,title):
+    word_vectors=model.wv
+    
+    words=list(word_vectors.index_to_key)[:1000]
+    vectors=[word_vectors[word] for word in words]
+    
+    #PCA
+    pca=PCA(n_components=3) #kaç boyutlu olacak -> 50'den 3 boyutluya indirme
+    reduced_vectors=pca.fit_transform(vectors)
+    
+    #3d görselleştirme
+    
+    fig=plt.figure(figsize=(12,10))
+    ax=fig.add_subplot(111,projection="3d")
+    
+    #vekötr çizdir
+    ax.scatter(reduced_vectors[:,0],reduced_vectors[:,1],reduced_vectors[:,2])
+    
+    #kelimeleri etiketle
+    for i, word in enumerate(words):
+        ax.text(reduced_vectors[i,0],reduced_vectors[i,1],reduced_vectors[i,2],word, fontsize=12)
+        
+    ax.set_title(title)
+    ax.set_xlabel("PC -1")
+    ax.set_ylabel("PC -2")
+    ax.set_zlabel("PC -3")
+plot_word_embedding(word2_vec_model, "Word2vec")
+plot_word_embedding(fasttext_model, "FastText")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
